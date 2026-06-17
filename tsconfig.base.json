@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "jsx": "react-native",
+    "baseUrl": ".",
+    "paths": {
+      "@observability/core": ["packages/core/src"],
+      "@observability/logger": ["packages/logger/src"],
+      "@observability/network": ["packages/network/src"],
+      "@observability/crash-reporter": ["packages/crash-reporter/src"],
+      "@observability/performance": ["packages/performance/src"],
+      "@observability/session": ["packages/session/src"],
+      "@observability/analytics": ["packages/analytics/src"],
+      "@observability/config": ["packages/config/src"],
+      "@observability/react-native": ["packages/react-native-integration/src"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}
