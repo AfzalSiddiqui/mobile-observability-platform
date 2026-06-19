@@ -1,12 +1,12 @@
 // Types
-export {
+export type {
   LogLevel,
   LogInput,
   LogEntry,
   LogProcessor,
   LogFormatter,
-  LOG_LEVEL_VALUES,
 } from './types';
+export { LOG_LEVEL_VALUES } from './types';
 
 // Core
 export { Logger } from './Logger';
@@ -26,4 +26,5 @@ export { JsonFormatter } from './formatters/JsonFormatter';
 export { BreadcrumbManager } from './breadcrumbs/BreadcrumbManager';
 
 // Native
-export { NativeLogBridge, NativeLogEntry } from './native/NativeLogBridge';
+export { NativeLogBridge } from './native/NativeLogBridge';
+export type { NativeLogEntry } from './native/NativeLogBridge';
