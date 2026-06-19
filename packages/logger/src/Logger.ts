@@ -69,10 +69,10 @@ export class Logger {
       name: childName,
       config: this.config,
       processors: this.processors,
-      formatter: this.formatter,
-      eventBus: this.eventBus,
+      formatter: this.formatter ?? undefined,
+      eventBus: this.eventBus ?? undefined,
       sessionId: this.sessionId,
-      breadcrumbManager: this.breadcrumbManager,
+      breadcrumbManager: this.breadcrumbManager ?? undefined,
       defaultContext: { ...this.defaultContext, ...defaultContext },
     });
   }
