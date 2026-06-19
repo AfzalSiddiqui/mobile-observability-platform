@@ -18,6 +18,8 @@ export class PluginRegistry {
       throw new Error(`Maximum number of plugins (${this.maxPlugins}) reached`);
     }
     this.plugins.set(plugin.name, plugin);
+    // Append to initOrder for late registration (after initializeAll was called)
+    this.initOrder.push(plugin);
   }
 
   async initializeAll(context: PluginContext): Promise<void> {

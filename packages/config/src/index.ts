@@ -1,4 +1,4 @@
-export {
+export type {
   LogLevel,
   Environment,
   FeatureFlags,

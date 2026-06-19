@@ -1,26 +1,30 @@
 // Types
-export {
+export type {
   EventType,
   EventSeverity,
   LogEventData,
   ObservabilityEvent,
-  createLogEvent,
-  createErrorEvent,
   BreadcrumbCategory,
   Breadcrumb,
   DeviceInfo,
   Transport,
-  NoopTransport,
   Plugin,
   PluginContext,
   LifecycleState,
-  LIFECYCLE_TRANSITIONS,
   StorageAdapter,
+} from './types';
+
+export {
+  createLogEvent,
+  createErrorEvent,
+  NoopTransport,
+  LIFECYCLE_TRANSITIONS,
 } from './types';
 
 // Core modules
 export { EventBus } from './EventBus';
-export { EventBuffer, FlushStrategy, EventBufferOptions } from './EventBuffer';
+export { EventBuffer } from './EventBuffer';
+export type { FlushStrategy, EventBufferOptions } from './EventBuffer';
 export { PluginRegistry } from './PluginRegistry';
 export { TransportManager } from './TransportManager';
 export { DefaultStorageAdapter, InMemoryStorage } from './StorageAdapter';

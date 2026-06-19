@@ -1,23 +1,24 @@
-export {
+export type {
   EventType,
   EventSeverity,
   LogEventData,
   ObservabilityEvent,
-  createLogEvent,
-  createErrorEvent,
 } from './events';
+export { createLogEvent, createErrorEvent } from './events';
 
-export {
+export type {
   BreadcrumbCategory,
   Breadcrumb,
 } from './breadcrumbs';
 
-export { DeviceInfo } from './device';
+export type { DeviceInfo } from './device';
 
-export { Transport, NoopTransport } from './transport';
+export type { Transport } from './transport';
+export { NoopTransport } from './transport';
 
-export { Plugin, PluginContext } from './plugin';
+export type { Plugin, PluginContext } from './plugin';
 
-export { LifecycleState, LIFECYCLE_TRANSITIONS } from './lifecycle';
+export type { LifecycleState } from './lifecycle';
+export { LIFECYCLE_TRANSITIONS } from './lifecycle';
 
-export { StorageAdapter } from './storage';
+export type { StorageAdapter } from './storage';

@@ -138,7 +138,10 @@ export class ConfigManager {
     }
 
     const oldConfig = { ...this.config };
-    this.config = deepMerge(this.config, partial);
+    this.config = deepMerge(
+      this.config as unknown as Record<string, unknown>,
+      partial as DeepPartial<Record<string, unknown>>,
+    ) as unknown as ObservabilityConfig;
     validateConfig(this.config);
 
     // Notify listeners
