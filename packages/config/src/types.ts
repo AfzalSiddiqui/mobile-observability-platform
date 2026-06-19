@@ -49,7 +49,7 @@ export interface LoggerConfig {
 export interface PackageConfigs {
   core: CoreConfig;
   logger: LoggerConfig;
-  [key: string]: Record<string, unknown>;
+  [key: string]: unknown;
 }
 
 export interface InitConfig {
