@@ -68,6 +68,12 @@ export function validateInitConfig(config: InitConfig): void {
       validatePositiveInt(config.logger.maxBreadcrumbs, 'logger.maxBreadcrumbs');
     }
   }
+
+  if (config.analytics) {
+    if (config.analytics.maxQueueSize !== undefined) {
+      validatePositiveInt(config.analytics.maxQueueSize, 'analytics.maxQueueSize');
+    }
+  }
 }
 
 export function validateConfig(config: ObservabilityConfig): void {
@@ -78,5 +84,6 @@ export function validateConfig(config: ObservabilityConfig): void {
     sampling: config.sampling,
     core: config.packages.core,
     logger: config.packages.logger,
+    analytics: config.packages.analytics,
   });
 }

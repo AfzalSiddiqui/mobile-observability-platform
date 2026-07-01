@@ -46,9 +46,23 @@ export interface LoggerConfig {
   sensitiveFields: string[];
 }
 
+export interface AnalyticsConfig {
+  /** Whether to output analytics events to console */
+  enableConsole: boolean;
+  /** Fields to redact from analytics properties */
+  sensitiveFields: string[];
+  /** Maximum number of events to queue before dropping oldest */
+  maxQueueSize: number;
+  /** Whether to automatically track screen views */
+  enableAutoScreenTracking: boolean;
+  /** Default properties added to every analytics event */
+  defaultProperties: Record<string, unknown>;
+}
+
 export interface PackageConfigs {
   core: CoreConfig;
   logger: LoggerConfig;
+  analytics: AnalyticsConfig;
   [key: string]: unknown;
 }
 
@@ -69,6 +83,8 @@ export interface InitConfig {
   core?: Partial<CoreConfig>;
   /** Logger configuration */
   logger?: Partial<LoggerConfig>;
+  /** Analytics configuration */
+  analytics?: Partial<AnalyticsConfig>;
 }
 
 export interface ObservabilityConfig {

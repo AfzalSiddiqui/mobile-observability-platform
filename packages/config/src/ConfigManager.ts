@@ -103,6 +103,10 @@ export class ConfigManager {
           ...defaults.packages.logger,
           ...initConfig.logger,
         },
+        analytics: {
+          ...defaults.packages.analytics,
+          ...initConfig.analytics,
+        },
       },
     };
 

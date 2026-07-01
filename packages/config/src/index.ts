@@ -5,6 +5,7 @@ export type {
   SamplingConfig,
   CoreConfig,
   LoggerConfig,
+  AnalyticsConfig,
   PackageConfigs,
   InitConfig,
   ObservabilityConfig,

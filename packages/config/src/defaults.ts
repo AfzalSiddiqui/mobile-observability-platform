@@ -42,6 +42,13 @@ export function createDefaultConfig(env: Environment): ObservabilityConfig {
         maxBreadcrumbs: 50,
         sensitiveFields: ['password', 'token', 'secret', 'authorization', 'cookie', 'creditCard', 'ssn'],
       },
+      analytics: {
+        enableConsole: env === 'development',
+        sensitiveFields: ['password', 'token', 'secret', 'authorization', 'cookie', 'creditCard', 'ssn'],
+        maxQueueSize: 500,
+        enableAutoScreenTracking: false,
+        defaultProperties: {},
+      },
     },
   };
 }
