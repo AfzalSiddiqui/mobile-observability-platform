@@ -4,6 +4,7 @@ import { ObservabilityEvent } from './types/events';
 export class PluginRegistry {
   private plugins: Map<string, Plugin> = new Map();
   private initOrder: Plugin[] = [];
+  private initializedPlugins: Set<string> = new Set();
   private maxPlugins: number;
 
   constructor(maxPlugins: number = 20) {
@@ -26,16 +27,23 @@ export class PluginRegistry {
     this.initOrder = this.topologicalSort();
 
     for (const plugin of this.initOrder) {
-      if (plugin.initialize) {
-        try {
-          await plugin.initialize(context);
-        } catch (err) {
-          throw new Error(
-            `Plugin "${plugin.name}" failed to initialize: ${err instanceof Error ? err.message : String(err)}`,
-          );
-        }
+      await this.initializePlugin(plugin, context);
+    }
+  }
+
+  async initializePlugin(plugin: Plugin, context: PluginContext): Promise<void> {
+    if (this.initializedPlugins.has(plugin.name)) return;
+
+    if (plugin.initialize) {
+      try {
+        await plugin.initialize(context);
+      } catch (err) {
+        throw new Error(
+          `Plugin "${plugin.name}" failed to initialize: ${err instanceof Error ? err.message : String(err)}`,
+        );
       }
     }
+    this.initializedPlugins.add(plugin.name);
   }
 
   processEvent(event: ObservabilityEvent): ObservabilityEvent | null {
