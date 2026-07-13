@@ -3,8 +3,6 @@ import {
   Plugin,
   PluginContext,
   ObservabilityEvent,
-  EventBus,
-  ObservabilitySDK,
 } from '@observability/core';
 import { Logger } from './Logger';
 import { LogProcessor } from './types';
@@ -52,18 +50,11 @@ export class LoggerPlugin implements Plugin {
       new SanitizationProcessor(loggerConfig.sensitiveFields),
     ];
 
-    let eventBus: EventBus | undefined;
-    try {
-      eventBus = ObservabilitySDK.getInstance().getEventBus();
-    } catch {
-      // SDK might not be available in standalone use
-    }
-
     this.logger = new Logger({
       config: loggerConfig,
       processors: this.processors,
       formatter: loggerConfig.enableConsole ? new ConsoleFormatter() : undefined,
-      eventBus,
+      emit: (event) => context.emit(event as unknown as ObservabilityEvent),
       sessionId: context.getSessionId(),
       breadcrumbManager: this.breadcrumbManager,
     });

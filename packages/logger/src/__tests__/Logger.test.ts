@@ -34,6 +34,24 @@ describe('Logger', () => {
     expect(handler).toHaveBeenCalledTimes(5);
   });
 
+  it('should forward events through the supplied SDK emitter', () => {
+    const emit = jest.fn();
+    const logger = new Logger({
+      config: defaultConfig,
+      emit,
+      sessionId: 'test-session',
+    });
+
+    logger.info('health check passed');
+
+    expect(emit).toHaveBeenCalledTimes(1);
+    expect(emit.mock.calls[0][0]).toMatchObject({
+      type: 'log',
+      sessionId: 'test-session',
+      data: { message: 'health check passed' },
+    });
+  });
+
   it('should respect minimum log level', () => {
     const bus = new EventBus();
     const handler = jest.fn();

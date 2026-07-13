@@ -19,6 +19,7 @@ export class Logger {
     processors?: LogProcessor[];
     formatter?: LogFormatter;
     eventBus?: EventBus;
+    emit?: (event: ReturnType<typeof createLogEvent>) => void;
     sessionId?: string;
     breadcrumbManager?: BreadcrumbManager;
     defaultContext?: Record<string, unknown>;
@@ -28,10 +29,13 @@ export class Logger {
     this.processors = options.processors ?? [];
     this.formatter = options.formatter ?? null;
     this.eventBus = options.eventBus ?? null;
+    this.emit = options.emit ?? null;
     this.sessionId = options.sessionId ?? '';
     this.breadcrumbManager = options.breadcrumbManager ?? null;
     this.defaultContext = options.defaultContext ?? {};
   }
+
+  private readonly emit: ((event: ReturnType<typeof createLogEvent>) => void) | null;
 
   debug(message: string, context?: Record<string, unknown>): void;
   debug(input: LogInput): void;
@@ -71,6 +75,7 @@ export class Logger {
       processors: this.processors,
       formatter: this.formatter ?? undefined,
       eventBus: this.eventBus ?? undefined,
+      emit: this.emit ?? undefined,
       sessionId: this.sessionId,
       breadcrumbManager: this.breadcrumbManager ?? undefined,
       defaultContext: { ...this.defaultContext, ...defaultContext },
@@ -133,7 +138,7 @@ export class Logger {
     }
 
     // Emit to event bus
-    if (this.eventBus && this.sessionId) {
+    if (this.sessionId) {
       const event = createLogEvent(
         generateEventId(),
         this.sessionId,
@@ -144,7 +149,11 @@ export class Logger {
           stackTrace: entry.error?.stack,
         },
       );
-      this.eventBus.emit('event', event);
+      if (this.emit) {
+        this.emit(event);
+      } else {
+        this.eventBus?.emit('event', event);
+      }
     }
   }
 
