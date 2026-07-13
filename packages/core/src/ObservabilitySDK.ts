@@ -22,6 +22,7 @@ export class ObservabilitySDK {
   private lifecycleManager: LifecycleManager;
   private storage: StorageAdapter;
   private sessionId: string;
+  private pendingPlugins: Plugin[] = [];
   private initialized = false;
 
   private constructor() {
@@ -59,6 +60,9 @@ export class ObservabilitySDK {
     const config = this.configManager.initialize(initConfig);
 
     this.pluginRegistry = new PluginRegistry(config.packages.core.maxPlugins);
+    for (const plugin of this.pendingPlugins) {
+      this.pluginRegistry.register(plugin);
+    }
 
     this.eventBuffer = new EventBuffer({
       maxSize: config.packages.core.maxBufferSize,
@@ -75,6 +79,7 @@ export class ObservabilitySDK {
     }
 
     await this.transportManager.initialize();
+    await this.pluginRegistry.initializeAll(this.createPluginContext());
 
     this.lifecycleManager.transition('active');
     this.lifecycleManager.startAppStateListener();
@@ -92,14 +97,17 @@ export class ObservabilitySDK {
   }
 
   async registerPlugin(plugin: Plugin): Promise<void> {
-    this.pluginRegistry.register(plugin);
-
-    if (this.initialized) {
-      const context = this.createPluginContext();
-      if (plugin.initialize) {
-        await plugin.initialize(context);
+    if (!this.initialized) {
+      if (this.pendingPlugins.some((pending) => pending.name === plugin.name)) {
+        throw new Error(`Plugin "${plugin.name}" is already registered`);
       }
+      this.pendingPlugins.push(plugin);
+      return;
     }
+
+    this.pluginRegistry.register(plugin);
+    this.pendingPlugins.push(plugin);
+    await this.pluginRegistry.initializePlugin(plugin, this.createPluginContext());
   }
 
   async initializePlugins(): Promise<void> {

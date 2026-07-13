@@ -37,6 +37,20 @@ describe('ObservabilitySDK', () => {
     expect(sdk.isInitialized()).toBe(true);
   });
 
+  it('should initialize plugins registered before the SDK', async () => {
+    const sdk = ObservabilitySDK.getInstance();
+    const plugin: Plugin = {
+      name: 'early-plugin',
+      version: '1.0.0',
+      initialize: jest.fn(),
+    };
+
+    await sdk.registerPlugin(plugin);
+    await sdk.init({ appId: 'test', appVersion: '1.0.0' });
+
+    expect(plugin.initialize).toHaveBeenCalledTimes(1);
+  });
+
   it('should reject double init', async () => {
     const sdk = ObservabilitySDK.getInstance();
     await sdk.init({ appId: 'test', appVersion: '1.0.0' });
