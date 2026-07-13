@@ -137,6 +137,22 @@ describe('Analytics', () => {
     expect(handler.mock.calls[0][0].data.name).toBe('click');
   });
 
+  it('should forward events through the supplied SDK emitter', () => {
+    const emit = jest.fn();
+    const analytics = new Analytics({
+      emit,
+      sessionId: 'test-session',
+    });
+
+    analytics.trackEvent('health_check_opened');
+
+    expect(emit).toHaveBeenCalledWith(expect.objectContaining({
+      type: 'user_action',
+      sessionId: 'test-session',
+      data: expect.objectContaining({ name: 'health_check_opened' }),
+    }));
+  });
+
   it('should emit screen view events to event bus', () => {
     const bus = new EventBus();
     const handler = jest.fn();
