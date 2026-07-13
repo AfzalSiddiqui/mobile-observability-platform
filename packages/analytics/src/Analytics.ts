@@ -1,4 +1,4 @@
-import { EventBus, generateEventId } from '@observability/core';
+import { EventBus, ObservabilityEvent, generateEventId } from '@observability/core';
 import {
   AnalyticsEntry,
   AnalyticsProcessor,
@@ -19,13 +19,17 @@ export class Analytics {
     processors?: AnalyticsProcessor[];
     providers?: AnalyticsProvider[];
     eventBus?: EventBus;
+    emit?: (event: ObservabilityEvent) => void;
     sessionId?: string;
   }) {
     this.processors = options.processors ?? [];
     this.providers = options.providers ?? [];
     this.eventBus = options.eventBus ?? null;
+    this.emit = options.emit ?? null;
     this.sessionId = options.sessionId ?? '';
   }
+
+  private readonly emit: ((event: ObservabilityEvent) => void) | null;
 
   trackEvent(name: string, properties?: Record<string, unknown>): void;
   trackEvent(input: TrackEventInput): void;
@@ -139,8 +143,8 @@ export class Analytics {
   }
 
   private emitEvent(entry: AnalyticsEntry): void {
-    if (this.eventBus && this.sessionId) {
-      this.eventBus.emit('analytics', {
+    if ((this.emit || this.eventBus) && this.sessionId) {
+      const event: ObservabilityEvent = {
         id: generateEventId(),
         type: entry.type === 'track' ? 'user_action' : 'navigation',
         severity: 'info' as const,
@@ -152,7 +156,12 @@ export class Analytics {
           userId: entry.userId,
         },
         tags: entry.tags,
-      });
+      };
+      if (this.emit) {
+        this.emit(event);
+      } else {
+        this.eventBus?.emit('analytics', event);
+      }
     }
   }
 }

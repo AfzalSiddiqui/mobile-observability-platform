@@ -3,8 +3,6 @@ import {
   Plugin,
   PluginContext,
   ObservabilityEvent,
-  EventBus,
-  ObservabilitySDK,
 } from '@observability/core';
 import { Analytics } from './Analytics';
 import { AnalyticsProcessor } from './types';
@@ -60,17 +58,10 @@ export class AnalyticsPlugin implements Plugin {
       }
     }
 
-    let eventBus: EventBus | undefined;
-    try {
-      eventBus = ObservabilitySDK.getInstance().getEventBus();
-    } catch {
-      // SDK might not be available in standalone use
-    }
-
     this.analytics = new Analytics({
       processors: this.processors,
       providers,
-      eventBus,
+      emit: context.emit,
       sessionId: context.getSessionId(),
     });
 
