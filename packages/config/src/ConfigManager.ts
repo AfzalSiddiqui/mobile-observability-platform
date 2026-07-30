@@ -107,6 +107,13 @@ export class ConfigManager {
           ...defaults.packages.analytics,
           ...initConfig.analytics,
         },
+        performance: {
+          ...defaults.packages.performance,
+          ...initConfig.performance,
+          launch: { ...defaults.packages.performance.launch, ...initConfig.performance?.launch },
+          anr: { ...defaults.packages.performance.anr, ...initConfig.performance?.anr },
+          latency: { ...defaults.packages.performance.latency, ...initConfig.performance?.latency },
+        },
       },
     };
 

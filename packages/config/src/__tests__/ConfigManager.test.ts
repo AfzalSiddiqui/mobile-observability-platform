@@ -64,6 +64,24 @@ describe('ConfigManager', () => {
     expect(config.packages.logger.minLevel).toBe('error');
   });
 
+  it('should merge nested performance health-check settings', () => {
+    const mgr = ConfigManager.getInstance();
+    const config = mgr.initialize({
+      ...validInit,
+      performance: {
+        launch: { coldLaunchThreshold: 5000 },
+        latency: { slowOperationThreshold: 750 },
+      },
+    });
+
+    expect(config.packages.performance.launch).toEqual({
+      coldLaunchThreshold: 5000,
+      hotLaunchThreshold: 1500,
+    });
+    expect(config.packages.performance.latency.slowOperationThreshold).toBe(750);
+    expect(config.packages.performance.enableANRDetection).toBe(true);
+  });
+
   it('should throw on invalid appId', () => {
     const mgr = ConfigManager.getInstance();
     expect(() => mgr.initialize({ appId: '', appVersion: '1.0' })).toThrow('appId');
