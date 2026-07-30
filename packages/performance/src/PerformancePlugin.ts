@@ -1,4 +1,4 @@
-import { ConfigManager, SamplingConfig } from '@observability/config';
+import { ConfigManager, PerformanceConfig as ConfigPerformanceConfig, SamplingConfig } from '@observability/config';
 import {
   Plugin,
   PluginContext,
@@ -10,25 +10,6 @@ import { ANRDetector } from './trackers/ANRDetector';
 import { AppLatencyTracker } from './trackers/AppLatencyTracker';
 import { TimestampProcessor } from './processors/TimestampProcessor';
 import { SamplingProcessor } from './processors/SamplingProcessor';
-
-const DEFAULT_PERFORMANCE_CONFIG: PerformanceConfig = {
-  enableLaunchTracking: true,
-  enableANRDetection: true,
-  enableLatencyTracking: true,
-  enableConsole: false,
-  launch: {
-    coldLaunchThreshold: 3000,
-    hotLaunchThreshold: 1500,
-  },
-  anr: {
-    checkInterval: 2000,
-    anrThreshold: 5000,
-  },
-  latency: {
-    slowOperationThreshold: 1000,
-    maxConcurrentSpans: 50,
-  },
-};
 
 export class PerformancePlugin implements Plugin {
   readonly name = 'performance';
@@ -138,11 +119,6 @@ export class PerformancePlugin implements Plugin {
   }
 
   private resolveConfig(configManager: ConfigManager): PerformanceConfig {
-    try {
-      const config = configManager.getPackageConfig('performance') as PerformanceConfig;
-      return { ...DEFAULT_PERFORMANCE_CONFIG, ...config };
-    } catch {
-      return DEFAULT_PERFORMANCE_CONFIG;
-    }
+    return configManager.getPackageConfig('performance') as ConfigPerformanceConfig;
   }
 }
