@@ -60,32 +60,20 @@ export interface AnalyticsConfig {
 }
 
 export interface PerformanceConfig {
-  /** Enable cold/hot launch tracking */
   enableLaunchTracking: boolean;
-  /** Enable ANR detection */
   enableANRDetection: boolean;
-  /** Enable app latency tracking */
   enableLatencyTracking: boolean;
-  /** Whether to output performance events to console */
   enableConsole: boolean;
-  /** Cold launch slow threshold in ms */
-  coldLaunchThreshold: number;
-  /** Hot launch slow threshold in ms */
-  hotLaunchThreshold: number;
-  /** ANR watchdog check interval in ms */
-  anrCheckInterval: number;
-  /** ANR detection threshold in ms */
-  anrThreshold: number;
-  /** Slow operation threshold in ms */
-  slowOperationThreshold: number;
-  /** Maximum concurrent latency spans */
-  maxConcurrentSpans: number;
+  launch: { coldLaunchThreshold: number; hotLaunchThreshold: number };
+  anr: { checkInterval: number; anrThreshold: number };
+  latency: { slowOperationThreshold: number; maxConcurrentSpans: number };
 }
 
 export interface PackageConfigs {
   core: CoreConfig;
   logger: LoggerConfig;
   analytics: AnalyticsConfig;
+  performance: PerformanceConfig;
   [key: string]: unknown;
 }
 
@@ -108,6 +96,7 @@ export interface InitConfig {
   logger?: Partial<LoggerConfig>;
   /** Analytics configuration */
   analytics?: Partial<AnalyticsConfig>;
+  performance?: DeepPartial<PerformanceConfig>;
 }
 
 export interface ObservabilityConfig {

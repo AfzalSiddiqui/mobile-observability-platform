@@ -74,6 +74,16 @@ export function validateInitConfig(config: InitConfig): void {
       validatePositiveInt(config.analytics.maxQueueSize, 'analytics.maxQueueSize');
     }
   }
+
+  if (config.performance) {
+    const { launch, anr, latency } = config.performance;
+    if (launch?.coldLaunchThreshold !== undefined) validatePositiveInt(launch.coldLaunchThreshold, 'performance.launch.coldLaunchThreshold');
+    if (launch?.hotLaunchThreshold !== undefined) validatePositiveInt(launch.hotLaunchThreshold, 'performance.launch.hotLaunchThreshold');
+    if (anr?.checkInterval !== undefined) validatePositiveInt(anr.checkInterval, 'performance.anr.checkInterval');
+    if (anr?.anrThreshold !== undefined) validatePositiveInt(anr.anrThreshold, 'performance.anr.anrThreshold');
+    if (latency?.slowOperationThreshold !== undefined) validatePositiveInt(latency.slowOperationThreshold, 'performance.latency.slowOperationThreshold');
+    if (latency?.maxConcurrentSpans !== undefined) validatePositiveInt(latency.maxConcurrentSpans, 'performance.latency.maxConcurrentSpans');
+  }
 }
 
 export function validateConfig(config: ObservabilityConfig): void {
@@ -85,5 +95,6 @@ export function validateConfig(config: ObservabilityConfig): void {
     core: config.packages.core,
     logger: config.packages.logger,
     analytics: config.packages.analytics,
+    performance: config.packages.performance,
   });
 }
