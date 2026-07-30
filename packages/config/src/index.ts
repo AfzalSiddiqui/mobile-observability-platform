@@ -6,6 +6,7 @@ export type {
   CoreConfig,
   LoggerConfig,
   AnalyticsConfig,
+  PerformanceConfig,
   PackageConfigs,
   InitConfig,
   ObservabilityConfig,

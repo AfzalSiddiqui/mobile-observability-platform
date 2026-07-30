@@ -49,6 +49,15 @@ export function createDefaultConfig(env: Environment): ObservabilityConfig {
         enableAutoScreenTracking: false,
         defaultProperties: {},
       },
+      performance: {
+        enableLaunchTracking: true,
+        enableANRDetection: true,
+        enableLatencyTracking: true,
+        enableConsole: false,
+        launch: { coldLaunchThreshold: 3000, hotLaunchThreshold: 1500 },
+        anr: { checkInterval: 2000, anrThreshold: 5000 },
+        latency: { slowOperationThreshold: 1000, maxConcurrentSpans: 50 },
+      },
     },
   };
 }
