@@ -7,6 +7,7 @@ export type {
   LoggerConfig,
   AnalyticsConfig,
   PerformanceConfig,
+  AnomalyDetectionConfig,
   PackageConfigs,
   InitConfig,
   ObservabilityConfig,

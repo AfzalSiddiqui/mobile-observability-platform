@@ -69,11 +69,33 @@ export interface PerformanceConfig {
   latency: { slowOperationThreshold: number; maxConcurrentSpans: number };
 }
 
+export interface AnomalyDetectionConfig {
+  /** Claude API key. Omit for statistical-only mode. */
+  apiKey?: string;
+  /** Claude model to use. */
+  model: string;
+  /** Size of each metric window in ms. */
+  windowSizeMs: number;
+  /** Number of windows to retain. */
+  maxWindows: number;
+  /** How often to run anomaly evaluation in ms. */
+  evaluationIntervalMs: number;
+  /** Z-score threshold for anomaly flagging. */
+  sensitivityThreshold: number;
+  /** Which event types to monitor. */
+  monitoredEventTypes: string[];
+  /** Minimum cooldown between AI API calls in ms. */
+  aiCooldownMs: number;
+  /** Whether to log detection results to console. */
+  enableConsole: boolean;
+}
+
 export interface PackageConfigs {
   core: CoreConfig;
   logger: LoggerConfig;
   analytics: AnalyticsConfig;
   performance: PerformanceConfig;
+  'ai-anomaly-detection'?: AnomalyDetectionConfig;
   [key: string]: unknown;
 }
 
@@ -97,6 +119,8 @@ export interface InitConfig {
   /** Analytics configuration */
   analytics?: Partial<AnalyticsConfig>;
   performance?: DeepPartial<PerformanceConfig>;
+  /** AI Anomaly Detection configuration */
+  'ai-anomaly-detection'?: Partial<AnomalyDetectionConfig>;
 }
 
 export interface ObservabilityConfig {

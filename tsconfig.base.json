@@ -28,7 +28,8 @@
       "@observability/session": ["packages/session/src"],
       "@observability/analytics": ["packages/analytics/src"],
       "@observability/config": ["packages/config/src"],
-      "@observability/react-native": ["packages/react-native-integration/src"]
+      "@observability/react-native": ["packages/react-native-integration/src"],
+      "@observability/ai-anomaly-detection": ["packages/ai-anomaly-detection/src"]
     }
   },
   "exclude": ["node_modules", "dist"]
