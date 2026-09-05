@@ -69,17 +69,18 @@ describe('StatisticalDetector', () => {
     const detector = new StatisticalDetector(2.5);
     const collector = new MetricCollector(1000, 10, ['log']);
 
-    // Build baseline: ~5 events per window
-    for (let i = 0; i < 5; i++) {
+    // Build baseline with natural variance: 4, 6, 5, 5 events per window
+    const windowCounts = [4, 6, 5, 5];
+    for (let i = 0; i < windowCounts.length; i++) {
       const t = i * 1100;
       jest.setSystemTime(t);
-      for (let j = 0; j < 5; j++) {
+      for (let j = 0; j < windowCounts[i]; j++) {
         collector.ingest(makeEvent({ type: 'log', timestamp: t + j }));
       }
     }
 
-    // Current window: 6 events (slight increase, within threshold)
-    const currentTime = 5 * 1100;
+    // Current window: 6 events (within threshold given baseline mean=5, stddev~0.7)
+    const currentTime = windowCounts.length * 1100;
     jest.setSystemTime(currentTime);
     for (let i = 0; i < 6; i++) {
       collector.ingest(makeEvent({ type: 'log', timestamp: currentTime + i }));
@@ -88,7 +89,7 @@ describe('StatisticalDetector', () => {
     const snapshot = collector.getSnapshot()!;
     const anomalies = detector.evaluate(snapshot, collector);
 
-    // Should not flag traffic_surge for slight increase
+    // Should not flag traffic_surge for slight increase (z-score ~1.3)
     const trafficAnomaly = anomalies.find((a) => a.anomalyType === 'traffic_surge');
     expect(trafficAnomaly).toBeUndefined();
   });
