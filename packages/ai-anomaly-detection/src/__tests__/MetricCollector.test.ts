@@ -80,6 +80,7 @@ describe('MetricCollector', () => {
   it('should filter events by monitored types', () => {
     const collector = new MetricCollector(60000, 10, ['error', 'log']);
 
+    jest.setSystemTime(1000);
     collector.ingest(makeEvent({ type: 'log', timestamp: 1000 }));
     collector.ingest(makeEvent({ type: 'navigation', timestamp: 1000 }));
 
